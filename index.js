@@ -8,11 +8,12 @@ const config = hexo.config.he_calendar || {};
 if (config.enable === false) {
   return;
 }
-
+// Default options
 const options = Object.assign({
   route: 'he-calendar/',
   width: '100%',
   height: '600px',
+  view: 'month',
   border_radius: '12px'
 }, config);
 
@@ -51,13 +52,36 @@ hexo.extend.generator.register('he-calendar', function(locals) {
   return getFiles(distDir, distDir);
 });
 
+// Usage: {% he_calendar %} or {% he_calendar view=week %} or {% he_calendar width=100% height=600px %}
 hexo.extend.tag.register('he_calendar', function(args) {
-  const width = args[0] || options.width;
-  const height = args[1] || options.height;
+  let width = options.width;
+  let height = options.height;
+  let view = options.view || 'month';
   const borderRadius = options.border_radius;
+
+  // Parse args
+  args.forEach(arg => {
+    if (arg.startsWith('width=')) width = arg.split('=')[1];
+    else if (arg.startsWith('height=')) height = arg.split('=')[1];
+    else if (arg.startsWith('view=')) view = arg.split('=')[1];
+    else if (arg.includes('px') || arg.includes('%')) {
+      // Legacy support for just passing width and height
+      if (arg === args[0]) width = arg;
+      else if (arg === args[1]) height = arg;
+    }
+  });
   
+  if (view === 'week' && height === options.height && options.height === '600px') {
+    height = '180px'; // automatically adjust default height for week view
+  }
+
+  // Make sure to load the iframe with absolute path based on hexo root
   const root = hexo.config.root || '/';
-  const iframeSrc = (root + '/' + routePath + 'index.html').replace(/\/{2,}/g, '/');
+  let iframeSrc = (root + '/' + routePath + 'index.html').replace(/\/{2,}/g, '/');
+  
+  if (view === 'week') {
+    iframeSrc += '?view=week';
+  }
 
   return `
     <div class="he-calendar-wrapper" style="width: ${width}; height: ${height}; overflow: hidden; border-radius: ${borderRadius}; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">

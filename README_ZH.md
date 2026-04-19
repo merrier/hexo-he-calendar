@@ -32,7 +32,8 @@ he_calendar:
   enable: true            # 是否启用
   route: he-calendar/     # 日历页面的路由路径
   width: 100%             # 默认宽度
-  height: 600px           # 默认高度
+  height: 600px           # 默认高度 (周视图默认为 180px)
+  view: month             # 视图模式：'month' (月视图) 或 'week' (周视图，适合较窄的侧边栏)
   border_radius: 12px     # 边框圆角
 ```
 
@@ -48,11 +49,17 @@ he_calendar:
 {% he_calendar %}
 ```
 
-你也可以在标签中临时覆盖宽高设置：
+你也可以在标签中临时覆盖部分设置：
 
 ```markdown
 # 临时指定为 800px 宽度，500px 高度
 {% he_calendar 800px 500px %}
+
+# 仅显示当前一周（适用于侧边栏）
+{% he_calendar view=week %}
+
+# 组合配置
+{% he_calendar width=300px height=200px view=week %}
 ```
 
 ## 💡 技术实现

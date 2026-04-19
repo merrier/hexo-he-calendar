@@ -32,7 +32,8 @@ he_calendar:
   enable: true            # Enable or disable
   route: he-calendar/     # Route path for the calendar static assets
   width: 100%             # Default embed width
-  height: 600px           # Default embed height
+  height: 600px           # Default embed height (180px if view is week)
+  view: month             # View mode: 'month' (default) or 'week' (sidebar mode)
   border_radius: 12px     # Border radius of the embed container
 ```
 
@@ -48,10 +49,17 @@ Welcome!
 {% he_calendar %}
 ```
 
-You can also override width and height per usage:
+You can also override settings per usage:
 
 ```markdown
+# Override width and height
 {% he_calendar 800px 500px %}
+
+# Only show the current week (useful for narrow sidebars)
+{% he_calendar view=week %}
+
+# Combine overrides
+{% he_calendar width=300px height=200px view=week %}
 ```
 
 ## How it works
