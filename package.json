@@ -1,6 +1,6 @@
 {
   "name": "hexo-he-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful Chinese-style calendar plugin for Hexo based on he-calendar.",
   "main": "index.js",
   "repository": {
