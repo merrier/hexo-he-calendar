@@ -1,0 +1,62 @@
+# hexo-he-calendar
+
+> A heartfelt Chinese-style calendar 🍵 — Hexo plugin edition
+
+`hexo-he-calendar` is a Hexo plugin wrapper around [he-calendar](https://github.com/scutken/he-calendar). With a simple configuration, you can embed a beautiful Chinese-style calendar (with lunar calendar and almanac) into your Hexo blog.
+
+## Features
+
+- **🎨 24 Solar Term themes**: Automatically adapts colors based on the current solar term
+- **📅 Lunar calendar & almanac**: Lunar date, solar terms, traditional festivals, and daily auspicious/inauspicious activities
+- **🌈 Multiple themes**: Built-in theme styles with auto light/dark mode support
+- **⚡ Zero CSS conflicts**: Rendered inside an iframe for perfect compatibility with any Hexo theme
+
+## Installation
+
+Run the following in your Hexo blog root:
+
+```bash
+npm install hexo-he-calendar --save
+# or
+yarn add hexo-he-calendar
+```
+
+## Configuration
+
+Add the following configuration to your Hexo `_config.yml` (optional):
+
+```yaml
+he_calendar:
+  enable: true            # Enable or disable
+  route: he-calendar/     # Route path for the calendar static assets
+  width: 100%             # Default embed width
+  height: 600px           # Default embed height
+  border_radius: 12px     # Border radius of the embed container
+```
+
+## Usage
+
+Use the `{% he_calendar %}` tag in any Markdown post/page:
+
+```markdown
+# My Calendar Page
+
+Welcome!
+
+{% he_calendar %}
+```
+
+You can also override width and height per usage:
+
+```markdown
+{% he_calendar 800px 500px %}
+```
+
+## How it works
+
+During the Hexo generate phase, this plugin publishes the prebuilt `he-calendar` static files to `public/he-calendar/` (configurable), and embeds the app via an iframe to ensure the calendar layout remains intact and avoids any style collisions with your Hexo theme.
+
+## License
+
+MIT
+
