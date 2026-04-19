@@ -3,15 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
-// Get plugin config
 const config = hexo.config.he_calendar || {};
 
-// If plugin is disabled, do nothing
 if (config.enable === false) {
   return;
 }
 
-// Default options
 const options = Object.assign({
   route: 'he-calendar/',
   width: '100%',
@@ -19,13 +16,11 @@ const options = Object.assign({
   border_radius: '12px'
 }, config);
 
-// Ensure route ends with a slash
 let routePath = options.route;
 if (!routePath.endsWith('/')) {
   routePath += '/';
 }
 
-// 1. Register generator to serve static files
 hexo.extend.generator.register('he-calendar', function(locals) {
   const distDir = path.join(__dirname, 'dist');
   if (!fs.existsSync(distDir)) {
@@ -42,7 +37,6 @@ hexo.extend.generator.register('he-calendar', function(locals) {
         results = results.concat(getFiles(filePath, baseDir));
       } else {
         const relPath = path.relative(baseDir, filePath).replace(/\\/g, '/');
-        // routePath is like "he-calendar/"
         results.push({
           path: routePath + relPath,
           data: function() {
@@ -57,14 +51,11 @@ hexo.extend.generator.register('he-calendar', function(locals) {
   return getFiles(distDir, distDir);
 });
 
-// 2. Register tag helper
-// Usage: {% he_calendar %} or {% he_calendar 100% 600px %}
 hexo.extend.tag.register('he_calendar', function(args) {
   const width = args[0] || options.width;
   const height = args[1] || options.height;
   const borderRadius = options.border_radius;
   
-  // Make sure to load the iframe with absolute path based on hexo root
   const root = hexo.config.root || '/';
   const iframeSrc = (root + '/' + routePath + 'index.html').replace(/\/{2,}/g, '/');
 

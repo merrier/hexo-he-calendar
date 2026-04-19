@@ -3,6 +3,24 @@
   "version": "1.0.0",
   "description": "A beautiful Chinese-style calendar plugin for Hexo based on he-calendar.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merrier/hexo-he-calendar.git"
+  },
+  "homepage": "https://github.com/merrier/hexo-he-calendar#readme",
+  "bugs": {
+    "url": "https://github.com/merrier/hexo-he-calendar/issues"
+  },
+  "files": [
+    "dist/",
+    "index.js",
+    "README.md",
+    "README_EN.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +29,10 @@
     "calendar",
     "he-calendar",
     "chinese",
-    "vue"
+    "lunar",
+    "almanac",
+    "tag",
+    "plugin"
   ],
   "author": "merrier",
   "license": "MIT",
