@@ -1,0 +1,21 @@
+{
+  "name": "hexo-he-calendar",
+  "version": "1.0.0",
+  "description": "A beautiful Chinese-style calendar plugin for Hexo based on he-calendar.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hexo",
+    "calendar",
+    "he-calendar",
+    "chinese",
+    "vue"
+  ],
+  "author": "merrier",
+  "license": "MIT",
+  "peerDependencies": {
+    "hexo": ">=4.0.0"
+  }
+}
