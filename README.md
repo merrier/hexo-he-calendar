@@ -34,6 +34,7 @@ he_calendar:
   width: 100%             # Default embed width
   height: 600px           # Default embed height (180px if view is week)
   view: month             # View mode: 'month' (default) or 'week' (sidebar mode)
+  hideHeader: false       # Whether to hide the calendar header (year/month selector & actions)
   border_radius: 12px     # Border radius of the embed container
 ```
 
@@ -58,8 +59,11 @@ You can also override settings per usage:
 # Only show the current week (useful for narrow sidebars)
 {% he_calendar view=week %}
 
+# Hide the top header area
+{% he_calendar hideHeader=true %}
+
 # Combine overrides
-{% he_calendar width=300px height=200px view=week %}
+{% he_calendar width=300px height=200px view=week hideHeader=true %}
 ```
 
 ## How it works
