@@ -14,6 +14,7 @@ const options = Object.assign({
   width: '100%',
   height: '600px',
   view: 'month',
+  defaultTheme: 'auto',
   hideHeader: false,
   border_radius: '12px'
 }, config);
@@ -53,11 +54,12 @@ hexo.extend.generator.register('he-calendar', function(locals) {
   return getFiles(distDir, distDir);
 });
 
-// Usage: {% he_calendar %} or {% he_calendar view=week hideHeader=true %} or {% he_calendar width=100% height=600px %}
+// Usage: {% he_calendar %} or {% he_calendar view=week hideHeader=true defaultTheme=red %} or {% he_calendar width=100% height=600px %}
 hexo.extend.tag.register('he_calendar', function(args) {
   let width = options.width;
   let height = options.height;
   let view = options.view || 'month';
+  let defaultTheme = options.defaultTheme || 'auto';
   let hideHeader = options.hideHeader || false;
   const borderRadius = options.border_radius;
 
@@ -66,6 +68,7 @@ hexo.extend.tag.register('he_calendar', function(args) {
     if (arg.startsWith('width=')) width = arg.split('=')[1];
     else if (arg.startsWith('height=')) height = arg.split('=')[1];
     else if (arg.startsWith('view=')) view = arg.split('=')[1];
+    else if (arg.startsWith('defaultTheme=')) defaultTheme = arg.split('=')[1];
     else if (arg.startsWith('hideHeader=')) hideHeader = arg.split('=')[1] === 'true';
     else if (arg.includes('px') || arg.includes('%')) {
       // Legacy support for just passing width and height
@@ -85,6 +88,7 @@ hexo.extend.tag.register('he_calendar', function(args) {
   const params = new URLSearchParams();
   if (view === 'week') params.append('view', 'week');
   if (hideHeader) params.append('hideHeader', 'true');
+  if (defaultTheme && defaultTheme !== 'auto') params.append('defaultTheme', defaultTheme);
   
   const queryString = params.toString();
   if (queryString) {

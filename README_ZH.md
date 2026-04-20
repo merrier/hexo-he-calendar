@@ -34,6 +34,7 @@ he_calendar:
   width: 100%             # 默认宽度
   height: 600px           # 默认高度 (周视图默认为 180px)
   view: month             # 视图模式：'month' (月视图) 或 'week' (周视图，适合较窄的侧边栏)
+  defaultTheme: auto      # 默认主题：'auto' (智能动态), 'default' (素雅), 'ink' (水墨), 'red' (朱红), 'gold' (鎏金), 'cyan' (黛蓝)
   hideHeader: false       # 是否隐藏顶部栏（包含年月选择、主题切换等）
   border_radius: 12px     # 边框圆角
 ```
@@ -62,8 +63,11 @@ he_calendar:
 # 隐藏顶部工具栏
 {% he_calendar hideHeader=true %}
 
+# 默认使用朱红主题
+{% he_calendar defaultTheme=red %}
+
 # 组合配置
-{% he_calendar width=300px height=200px view=week hideHeader=true %}
+{% he_calendar width=300px height=200px view=week hideHeader=true defaultTheme=ink %}
 ```
 
 ## 💡 技术实现

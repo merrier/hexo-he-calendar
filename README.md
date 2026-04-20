@@ -34,6 +34,7 @@ he_calendar:
   width: 100%             # Default embed width
   height: 600px           # Default embed height (180px if view is week)
   view: month             # View mode: 'month' (default) or 'week' (sidebar mode)
+  defaultTheme: auto      # Default theme color: 'auto' (default), 'default' (elegant), 'ink' (black), 'red' (cinnabar), 'gold' (golden), 'cyan' (dark blue)
   hideHeader: false       # Whether to hide the calendar header (year/month selector & actions)
   border_radius: 12px     # Border radius of the embed container
 ```
@@ -62,8 +63,11 @@ You can also override settings per usage:
 # Hide the top header area
 {% he_calendar hideHeader=true %}
 
+# Set default theme to cinnabar red
+{% he_calendar defaultTheme=red %}
+
 # Combine overrides
-{% he_calendar width=300px height=200px view=week hideHeader=true %}
+{% he_calendar width=300px height=200px view=week hideHeader=true defaultTheme=ink %}
 ```
 
 ## How it works
