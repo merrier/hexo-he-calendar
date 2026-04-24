@@ -99,9 +99,54 @@ hexo.extend.tag.register('he_calendar', function(args) {
     iframeSrc += '?' + queryString;
   }
 
+  const wrapperId = 'he-calendar-wrapper-' + Math.random().toString(36).substr(2, 9);
+
   return `
-    <div class="he-calendar-wrapper" style="width: ${width}; height: ${height}; max-width: 100%; overflow: hidden; border-radius: ${borderRadius}; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; box-sizing: border-box;">
+    <div id="${wrapperId}" class="he-calendar-wrapper" style="width: ${width}; height: ${height}; max-width: 100%; overflow: hidden; border-radius: ${borderRadius}; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; box-sizing: border-box;">
       <iframe src="${iframeSrc}" style="width: 100%; height: 100%; flex: 1; border: none; border-radius: ${borderRadius}; background: transparent; max-width: 100%; min-width: 0; min-height: 0; display: block;" frameborder="0" scrolling="no"></iframe>
+      <script>
+        (function() {
+          var wrapper = document.getElementById('${wrapperId}');
+          if (!wrapper) return;
+          var iframe = wrapper.querySelector('iframe');
+          if (!iframe) return;
+          
+          function updateTheme() {
+            var isDark = false;
+            var html = document.documentElement;
+            var body = document.body;
+            var htmlClass = html.getAttribute('class') || '';
+            var bodyClass = body.getAttribute('class') || '';
+            
+            if (htmlClass.indexOf('dark') !== -1 || html.getAttribute('data-theme') === 'dark' || 
+                bodyClass.indexOf('dark') !== -1 || body.getAttribute('data-theme') === 'dark' ||
+                html.getAttribute('data-user-color-scheme') === 'dark') {
+              isDark = true;
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              if (htmlClass.indexOf('light') === -1 && html.getAttribute('data-theme') !== 'light') {
+                 isDark = true;
+              }
+            }
+            if (iframe.contentWindow) {
+              iframe.contentWindow.postMessage({ type: 'he-calendar-theme', theme: isDark ? 'dark' : 'light' }, '*');
+            }
+          }
+
+          iframe.addEventListener('load', updateTheme);
+
+          if (typeof MutationObserver !== 'undefined') {
+            var observer = new MutationObserver(function() {
+              updateTheme();
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-user-color-scheme'] });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+          }
+
+          if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+          }
+        })();
+      </script>
     </div>
   `;
 });

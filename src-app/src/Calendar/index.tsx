@@ -8,11 +8,22 @@ const Calendar: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [colorMode, setColorMode] = useState('auto');
+  const [externalTheme, setExternalTheme] = useState<'dark' | 'light' | null>(null);
   const [currentTheme, setCurrentTheme] = useState('red');
   const [showThemePicker, setShowThemePicker] = useState(false);
   
   const [view, setView] = useState('month');
   const [hideHeader, setHideHeader] = useState(false);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'he-calendar-theme') {
+        setExternalTheme(event.data.theme);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -32,7 +43,7 @@ const Calendar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const isDark = colorMode === 'dark' || (colorMode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const isDark = colorMode === 'dark' || (colorMode === 'auto' && (externalTheme === 'dark' || (externalTheme === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)));
     const themeMap: Record<string, any> = {
       'default': { primaryColor: '#A3D5E0', bgColor: isDark ? '#1a1a1a' : '#f9fafb', accentColor: '#7db4c4' },
       'ink': { primaryColor: isDark ? '#9ca3af' : '#111827', bgColor: isDark ? '#111827' : '#f3f4f6', accentColor: isDark ? '#6b7280' : '#374151' },
@@ -90,7 +101,7 @@ const Calendar: React.FC = () => {
       root.style.setProperty('--almanac-text-shadow-color', 'rgba(180, 83, 9, 0.15)');
       root.style.setProperty('--almanac-shadow-color', 'rgba(180, 83, 9, 0.05)');
     }
-  }, [currentTheme, colorMode]);
+  }, [currentTheme, colorMode, externalTheme]);
 
   const handleScroll = useCallback((e: React.WheelEvent) => {
     if (e.deltaY > 0) {
@@ -144,7 +155,7 @@ const Calendar: React.FC = () => {
 
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 
-  const isDark = colorMode === 'dark' || (colorMode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark = colorMode === 'dark' || (colorMode === 'auto' && (externalTheme === 'dark' || (externalTheme === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)));
   return (
     <div className={`app-container ${view === 'week' ? 'is-week-view' : ''} ${hideHeader ? 'hide-header' : ''}`}>
       <div className={`calendar-container ${isDark ? 'dark-mode' : 'light-mode'}`} data-mode={isDark ? 'dark' : 'light'}>
