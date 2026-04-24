@@ -8,10 +8,11 @@ const Calendar: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [colorMode, setColorMode] = useState('auto');
+  const [currentTheme, setCurrentTheme] = useState('red');
+  const [showThemePicker, setShowThemePicker] = useState(false);
   
   const [view, setView] = useState('month');
   const [hideHeader, setHideHeader] = useState(false);
-  const [showThemePicker, setShowThemePicker] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -24,12 +25,72 @@ const Calendar: React.FC = () => {
     if (hideHeaderParam === 'true') setHideHeader(true);
     if (colorModeParam) setColorMode(colorModeParam);
     
-    // 如果有 defaultTheme 参数，可以通过 DOM dataset 或类似方式应用到顶级节点，
-    // 原逻辑中是用 CSS 控制，这里保留该入口以供兼容
+    // 如果有 defaultTheme 参数，应用该主题
     if (defaultThemeParam) {
-      document.documentElement.dataset.theme = defaultThemeParam;
+      setCurrentTheme(defaultThemeParam);
     }
   }, []);
+
+  useEffect(() => {
+    const isDark = colorMode === 'dark' || (colorMode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const themeMap: Record<string, any> = {
+      'default': { primaryColor: '#A3D5E0', bgColor: isDark ? '#1a1a1a' : '#f9fafb', accentColor: '#7db4c4' },
+      'ink': { primaryColor: isDark ? '#9ca3af' : '#111827', bgColor: isDark ? '#111827' : '#f3f4f6', accentColor: isDark ? '#6b7280' : '#374151' },
+      'red': { primaryColor: '#b91c1c', bgColor: isDark ? '#1a1a1a' : '#fff1f2', accentColor: '#b91c1c' },
+      'gold': { primaryColor: '#b45309', bgColor: isDark ? '#1a1a1a' : '#fffbeb', accentColor: '#b45309' },
+      'cyan': { primaryColor: '#1e40af', bgColor: isDark ? '#1a1a1a' : '#eff6ff', accentColor: '#1e40af' },
+      'auto': { primaryColor: '#b91c1c', bgColor: isDark ? '#1a1a1a' : '#fff1f2', accentColor: '#b91c1c' } // Fallback for auto
+    };
+
+    const theme = themeMap[currentTheme] || themeMap['red']; // Default fallback to red as requested
+    const root = document.documentElement;
+    root.style.setProperty('--primary-color', theme.primaryColor);
+    root.style.setProperty('--bg-color', theme.bgColor);
+    root.style.setProperty('--accent-color', theme.accentColor);
+    root.style.setProperty('--saved-primary-color', theme.primaryColor);
+
+    if (isDark) {
+      root.style.setProperty('--header-bg', '#1e1e1e');
+      root.style.setProperty('--panel-bg', '#2d2d2d');
+      root.style.setProperty('--cell-bg', '#2d2d2d');
+      root.style.setProperty('--hover-bg', '#3d3d3d');
+      root.style.setProperty('--border-color', '#ffffff14');
+      root.style.setProperty('--text-color', '#e5e7eb');
+      root.style.setProperty('--secondary-text', '#9ca3af');
+      root.style.setProperty('--almanac-gold', '#E9BB4E');
+      root.style.setProperty('--almanac-gold-soft', '#E9BB4E80');
+      root.style.setProperty('--almanac-bg', '#262626');
+      root.style.setProperty('--almanac-line', '#ffffff14');
+      root.style.setProperty('--almanac-soft-line', '#ffffff0a');
+      root.style.setProperty('--almanac-board-bg', '#1e1e1e');
+      root.style.setProperty('--almanac-detail-bg', '#1e1e1e');
+      root.style.setProperty('--almanac-ganzhi-bg', '#333333');
+      root.style.setProperty('--almanac-luck-ji-bg', '#4a361e');
+      root.style.setProperty('--almanac-luck-xiong-bg', '#3d3d3d');
+      root.style.setProperty('--almanac-text-shadow-color', 'rgba(0, 0, 0, 0.8)');
+      root.style.setProperty('--almanac-shadow-color', 'rgba(0, 0, 0, 0.5)');
+    } else {
+      root.style.setProperty('--header-bg', '#ffffff');
+      root.style.setProperty('--panel-bg', '#ffffff');
+      root.style.setProperty('--cell-bg', '#ffffff');
+      root.style.setProperty('--hover-bg', 'rgba(0,0,0,0.03)');
+      root.style.setProperty('--border-color', 'rgba(0,0,0,0.06)');
+      root.style.setProperty('--text-color', '#1f2937');
+      root.style.setProperty('--secondary-text', '#6b7280');
+      root.style.setProperty('--almanac-gold', '#b45309');
+      root.style.setProperty('--almanac-gold-soft', 'rgba(180, 83, 9, 0.5)');
+      root.style.setProperty('--almanac-bg', '#fcfaf8');
+      root.style.setProperty('--almanac-line', 'rgba(180, 83, 9, 0.15)');
+      root.style.setProperty('--almanac-soft-line', 'rgba(180, 83, 9, 0.08)');
+      root.style.setProperty('--almanac-board-bg', '#ffffff');
+      root.style.setProperty('--almanac-detail-bg', '#ffffff');
+      root.style.setProperty('--almanac-ganzhi-bg', '#fcfaf8');
+      root.style.setProperty('--almanac-luck-ji-bg', '#fef3c7');
+      root.style.setProperty('--almanac-luck-xiong-bg', '#f3f4f6');
+      root.style.setProperty('--almanac-text-shadow-color', 'rgba(180, 83, 9, 0.15)');
+      root.style.setProperty('--almanac-shadow-color', 'rgba(180, 83, 9, 0.05)');
+    }
+  }, [currentTheme, colorMode]);
 
   const handleScroll = useCallback((e: React.WheelEvent) => {
     if (e.deltaY > 0) {
@@ -74,18 +135,19 @@ const Calendar: React.FC = () => {
   const currentLunar = useMemo(() => currentSolar.getLunarDay(), [currentSolar]);
 
   const currentAlmanac = useMemo(() => {
-    // 兼容 tyme4ts 版本可能导致的 getDayYi 返回值类型问题
+    // 兼容 tyme4ts 版本的 getRecommends 和 getAvoids
     return {
-      yi: (currentLunar as any).getDayYi ? ((currentLunar as any).getDayYi().map((item: any) => item.getName ? item.getName() : item) || []) : [],
-      ji: (currentLunar as any).getDayJi ? ((currentLunar as any).getDayJi().map((item: any) => item.getName ? item.getName() : item) || []) : [],
+      yi: (currentLunar as any).getRecommends ? ((currentLunar as any).getRecommends().map((item: any) => item.getName ? item.getName() : item) || []) : [],
+      ji: (currentLunar as any).getAvoids ? ((currentLunar as any).getAvoids().map((item: any) => item.getName ? item.getName() : item) || []) : [],
     };
   }, [currentLunar]);
 
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 
+  const isDark = colorMode === 'dark' || (colorMode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   return (
     <div className={`app-container ${view === 'week' ? 'is-week-view' : ''} ${hideHeader ? 'hide-header' : ''}`}>
-      <div className="calendar-container" data-mode={colorMode}>
+      <div className={`calendar-container ${isDark ? 'dark-mode' : 'light-mode'}`} data-mode={isDark ? 'dark' : 'light'}>
         <div className="calendar-header">
           <div className="header-left">
             <div className="current-info">
@@ -110,6 +172,44 @@ const Calendar: React.FC = () => {
                     <button className={`mode-btn ${colorMode === 'light' ? 'active' : ''}`} onClick={() => setColorMode('light')}>浅色</button>
                     <button className={`mode-btn ${colorMode === 'dark' ? 'active' : ''}`} onClick={() => setColorMode('dark')}>深色</button>
                     <button className={`mode-btn ${colorMode === 'auto' ? 'active' : ''}`} onClick={() => setColorMode('auto')}>自动</button>
+                  </div>
+                  <div className="settings-separator"></div>
+                  <div className="theme-color-switch">
+                    <div 
+                      className="theme-option-item"
+                      onClick={() => setCurrentTheme('default')}
+                    >
+                      <div style={{ background: '#A3D5E0' }} className={`theme-dot ${currentTheme === 'default' ? 'active' : ''}`}></div>
+                      <span className="theme-name">素雅</span>
+                    </div>
+                    <div 
+                      className="theme-option-item"
+                      onClick={() => setCurrentTheme('ink')}
+                    >
+                      <div style={{ background: '#111827' }} className={`theme-dot ${currentTheme === 'ink' ? 'active' : ''}`}></div>
+                      <span className="theme-name">水墨</span>
+                    </div>
+                    <div 
+                      className="theme-option-item"
+                      onClick={() => setCurrentTheme('red')}
+                    >
+                      <div style={{ background: '#b91c1c' }} className={`theme-dot ${currentTheme === 'red' ? 'active' : ''}`}></div>
+                      <span className="theme-name">朱红</span>
+                    </div>
+                    <div 
+                      className="theme-option-item"
+                      onClick={() => setCurrentTheme('gold')}
+                    >
+                      <div style={{ background: '#b45309' }} className={`theme-dot ${currentTheme === 'gold' ? 'active' : ''}`}></div>
+                      <span className="theme-name">鎏金</span>
+                    </div>
+                    <div 
+                      className="theme-option-item"
+                      onClick={() => setCurrentTheme('cyan')}
+                    >
+                      <div style={{ background: '#1e40af' }} className={`theme-dot ${currentTheme === 'cyan' ? 'active' : ''}`}></div>
+                      <span className="theme-name">黛蓝</span>
+                    </div>
                   </div>
                 </div>
               )}

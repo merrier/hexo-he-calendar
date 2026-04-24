@@ -184,3 +184,46 @@
 .is-week-view .grid { grid-template-rows: 1fr; }
 .hide-header .calendar-header { display: none !important; }
 .hide-header .main-content { border-top-left-radius: 12px; border-top-right-radius: 12px; }
+.settings-separator {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 10px 0;
+}
+
+.theme-color-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theme-option-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.theme-option-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.theme-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.theme-dot.active {
+  border-color: var(--text-color);
+  transform: scale(1.2);
+}
+
+.theme-name {
+  font-size: 14px;
+  color: var(--text-color);
+}
