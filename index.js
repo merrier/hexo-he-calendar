@@ -100,8 +100,8 @@ hexo.extend.tag.register('he_calendar', function(args) {
   }
 
   return `
-    <div class="he-calendar-wrapper" style="width: ${width}; height: ${height}; overflow: hidden; border-radius: ${borderRadius}; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-      <iframe src="${iframeSrc}" style="width: 100%; height: 100%; border: none; border-radius: ${borderRadius}; background: transparent;" frameborder="0" scrolling="no"></iframe>
+    <div class="he-calendar-wrapper" style="width: ${width}; height: ${height}; max-width: 100%; overflow: hidden; border-radius: ${borderRadius}; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; box-sizing: border-box;">
+      <iframe src="${iframeSrc}" style="width: 100%; height: 100%; flex: 1; border: none; border-radius: ${borderRadius}; background: transparent; max-width: 100%; min-width: 0; min-height: 0; display: block;" frameborder="0" scrolling="no"></iframe>
     </div>
   `;
 });

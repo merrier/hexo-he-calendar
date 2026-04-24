@@ -1,4 +1,4 @@
-.app-container { width: 100vw; height: 100vh; overflow: hidden; }
+.app-container { width: 100vw; height: 100vh; overflow: hidden; min-width: 0; box-sizing: border-box; }
 @media (min-width: 1024px) {
   .app-container:not(.is-utools) { display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
   .app-container:not(.is-utools) > * { max-width: 1200px; max-height: 800px; width: 100%; height: 100%; border-radius: 16px; box-shadow: 0 25px 50px -12px #00000040; overflow: hidden; }
@@ -7,7 +7,7 @@
   .app-container:not(.is-utools) { display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
   .app-container:not(.is-utools) > * { max-width: 95%; max-height: 95%; border-radius: 12px; box-shadow: 0 20px 40px -10px #0003; overflow: hidden; }
 }
-.calendar-container { display: flex; flex-direction: column; height: 100%; background-color: var(--bg-color); color: var(--text-color); font-family: PingFang SC, Microsoft YaHei, sans-serif; overflow: hidden; -webkit-user-select: none; user-select: none; --rest-color: #ef4444; --work-color: #6b7280; }
+.calendar-container { display: flex; flex-direction: column; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-color); font-family: PingFang SC, Microsoft YaHei, sans-serif; overflow: hidden; -webkit-user-select: none; user-select: none; --rest-color: #ef4444; --work-color: #6b7280; min-width: 0; box-sizing: border-box; }
 .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background-color: var(--header-bg); border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 4px #00000005; }
 .year-month { font-size: 1.25rem; font-weight: 600; color: var(--primary-color); cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all .2s; margin-right: 4px; }
 .year-month:hover { background-color: var(--hover-bg); }
@@ -59,11 +59,11 @@
 .link-text { transition: color .2s; }
 .icon-btn.active { background-color: var(--hover-bg); border-color: var(--primary-color); color: var(--primary-color); }
 .shadow-lg { box-shadow: 0 10px 15px -3px #0000001a, 0 4px 6px -2px #0000000d; }
-.main-content { display: flex; flex: 1; overflow: hidden; }
-.calendar-grid-wrapper { flex: 1; padding: 16px; display: flex; flex-direction: column; }
+.main-content { display: flex; flex: 1; overflow: hidden; min-width: 0; box-sizing: border-box; }
+.calendar-grid-wrapper { flex: 1; padding: 16px; display: flex; flex-direction: column; min-width: 0; box-sizing: border-box; overflow: hidden; }
 .week-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 8px; font-weight: 600; color: var(--primary-color); }
-.grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(6, 1fr); flex: 1; gap: 4px; }
-.day-cell { background-color: var(--cell-bg); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: all .2s; border: 1px solid transparent; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(6, 1fr); flex: 1; gap: 4px; min-width: 0; box-sizing: border-box; }
+.day-cell { background-color: var(--cell-bg); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: all .2s; border: 1px solid transparent; min-width: 0; box-sizing: border-box; overflow: hidden; }
 .day-cell:hover { background-color: var(--hover-bg); transform: translateY(-2px); box-shadow: 0 4px 8px #0000000d; }
 .day-cell.selected { border-color: var(--primary-color); background-color: var(--hover-bg); }
 .day-cell.today { background-color: var(--primary-color); box-shadow: 0 4px 12px var(--primary-color); z-index: 1; }
@@ -71,7 +71,7 @@
 .day-cell.other-month { opacity: .3; }
 .solar-day { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
 .day-cell.weekend .solar-day { color: var(--rest-color); }
-.lunar-day { font-size: .75rem; color: var(--secondary-text); }
+.lunar-day { font-size: .75rem; color: var(--secondary-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; text-align: center; }
 .lunar-day.festival { color: var(--accent-color); font-weight: 500; }
 .holiday-tag { position: absolute; top: 4px; right: 4px; font-size: .65rem; padding: 1px 3px; border-radius: 3px; line-height: 1; }
 .holiday-tag.rest { background-color: var(--rest-color); color: #fff; }
